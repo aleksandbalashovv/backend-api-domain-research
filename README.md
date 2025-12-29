@@ -31,6 +31,20 @@
 
 ## Роль автотестов
 Автотесты в рамках исследования использовались не как средство покрытия сценариев, а как **инструмент фиксации доменных границ**. Каждый автотест выступает в роли исполняемой спецификации, документирующей ожидаемое поведение системы.
+### Примеры автотестов (Invariant Checks)
+
+// Проверка инварианта валидного состояния сущности
+pm.test("Entity cannot be saved in invalid state", function () {
+    pm.expect(pm.response.code).to.be.oneOf([400, 422]); 
+    // Ожидаем ошибку валидации, а не 200 OK
+});
+
+// Проверка инварианта идентичности (Immutable ID)
+pm.test("Entity ID cannot be changed via PUT", function () {
+    const responseData = pm.response.json();
+    pm.expect(responseData.id).to.equal(pm.iterationData.get("original_id"));
+});
+
 
 ## Ценность подхода
 - Выявление архитектурных проблем на раннем этапе.
